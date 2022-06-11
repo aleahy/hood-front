@@ -12,9 +12,9 @@ export const useImageStore = defineStore("images", {
         },
 
         async postImageUri(uri) {
-            const image = (await axios.post('/api/images', {
+            await axios.post('/api/images', {
                 image_uri: uri,
-            })).data
+            });
         }
     }
 });

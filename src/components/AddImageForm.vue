@@ -12,7 +12,7 @@
     </form>
 
     <div class="mt-10">
-      <img v-show="displayImage" :src="imageUri" @error="hideImage"/>
+      <img v-show="displayImage" class="w-64" :src="imageUri" @error="hideImage"/>
     </div>
   </div>
 </template>
@@ -55,7 +55,6 @@ const onSubmit = () => {
 };
 
 watch(imageUri, () => {
-  console.log('changed');
   displayImage.value = true;
 });
 </script>

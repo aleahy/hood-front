@@ -46,9 +46,6 @@ const router = createRouter({
     {
       path: "/add",
       name: "addImage",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("../views/AddImageView.vue"),
       meta: {
         layout: AuthLayout,

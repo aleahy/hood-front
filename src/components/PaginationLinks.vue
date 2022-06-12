@@ -3,30 +3,36 @@
     <button type="button"
             @click="prevPage"
             :disabled="!hasPreviousPage"
-            class="border px-2 py-1 rounded shadow disabled:opacity-50">
-      Previous
+            class="border hover:bg-gray-100 disabled:hover:bg-white px-2 py-1 rounded shadow disabled:opacity-30 inline-flex justify-center items-center space-x-4">
+      <ChevronLeftIcon class="w-5 h-5"/>
+      <span>Prev</span>
     </button>
     <div>Page {{ meta.current_page }}</div>
     <button type="button"
             @click="nextPage"
             :disabled="!hasNextPage"
-            class="border px-2 py-1 rounded shadow disabled:opacity-50">
-      Next
+            class="border hover:bg-gray-100 disabled:hover:bg-white px-2 py-1 rounded shadow disabled:opacity-30 inline-flex justify-center items-center space-x-4">
+      <span>Next</span>
+      <ChevronRightIcon class="w-5 h-5" />
     </button>
 
   </div>
 </template>
 <script setup>
 import {computed} from "vue";
-
+import {ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/outline"
 const props = defineProps({
   meta: {
     type: Object,
-    default: {},
+    default() {
+      return {};
+    },
   },
   links: {
     type: Object,
-    default: {},
+    default() {
+      return {};
+    },
   },
 });
 

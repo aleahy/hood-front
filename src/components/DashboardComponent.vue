@@ -1,8 +1,7 @@
 <template>
-  <MainSection title="Collected Images">
-
+  <div>
     <div class="px-4 sm:px-0 mt-4">
-      <RouterLink :to="{ name: 'addImage'}" class="bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500 disabled:opacity-50">Add More</RouterLink>
+      <RouterLink :to="{ name: 'addImage'}" class="bg-violet-900 text-white rounded py-2 px-4 hover:bg-violet-500 disabled:opacity-50">Add More</RouterLink>
     </div>
 
     <div v-if="imagesStore.isLoading" class="skeleton-images py-4 mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 place-items-center">
@@ -33,12 +32,11 @@
 
     <PaginationLinks :meta="imagesStore.meta" :links="imagesStore.links" @page-selected="loadPage"/>
 
-  </MainSection>
+  </div>
 </template>
 <script setup>
 import { onMounted } from "vue";
 import {useImageStore} from "../stores/useImages";
-import MainSection from "./MainSection.vue";
 import PaginationLinks from "./PaginationLinks.vue";
 
 const imagesStore = useImageStore();

@@ -5,8 +5,7 @@
         <div class="flex justify-between h-16">
           <div class="flex">
             <div class="flex-shrink-0 flex items-center">
-              <img class="block lg:hidden h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" />
-              <img class="hidden lg:block h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg" alt="Workflow" />
+              <img class="block h-8 w-auto" src="https://www.hood.ai/hubfs/Hood_November_2021/images/Logo.png" alt="Workflow" />
             </div>
             <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
               <RouterLink v-for="item in navigation" :key="item.name" :to="item.href" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900"  active-class="border-indigo-500 border-b-2" >

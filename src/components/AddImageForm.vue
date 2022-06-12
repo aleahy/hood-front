@@ -15,7 +15,7 @@
     </form>
 
     <h3 class="mt-4">Preview</h3>
-    <ImagePreview :image-uri="throttledImageUri" class="mt-1" @has-error="updatePreviewError" @is-valid="updateIsValidImage"/>
+    <ImagePreview :image-uri="debouncedImageUri" class="mt-1" @has-error="updatePreviewError" @is-valid="updateIsValidImage"/>
   </div>
 </template>
 <script setup>
@@ -28,7 +28,7 @@ import {ref, watch } from "vue";
 import {useErrorStore} from "../stores/useError";
 import {useImageStore} from "../stores/useImages";
 
-import throttle from 'lodash/throttle';
+import debounce from 'lodash/debounce';
 
 
 const preventSubmit = ref(true);
@@ -37,7 +37,7 @@ const imageUri = ref('');
 const imageStore = useImageStore();
 const errorsStore = useErrorStore();
 const previewError = ref(false);
-const throttledImageUri = ref('');
+const debouncedImageUri = ref('');
 
 
 const resetForm = () => {
@@ -77,7 +77,7 @@ const updateIsValidImage = (isValid) => {
   preventSubmit.value = !isValid;
 };
 
-watch(imageUri, throttle((value) => {
-  throttledImageUri.value = value;
-}, 300));
+watch(imageUri, debounce((value) => {
+  debouncedImageUri.value = value;
+}, 200));
 </script>

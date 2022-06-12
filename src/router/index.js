@@ -60,11 +60,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth && !useAuthStore().loggedIn) {
-    console.log('Not logged in');
     next({ name: "login" });
   } else {
-    console.log('Auth Store:', useAuthStore().loggedIn);
-    console.log('requireAuth:', to.meta.requireAuth);
     next();
   }
 });

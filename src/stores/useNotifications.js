@@ -12,7 +12,6 @@ export const useNotificationsStore = defineStore("notifications", {
 
     actions: {
        listenToImageRetrievedEvent(channel) {
-           console.log('Starting to listen to', channel);
            window.Echo.private(channel)
                .listen('ImageRetrievedEvent', (e) => {
                    this.notifications.push(this.createImageRetrievedNotification(e))

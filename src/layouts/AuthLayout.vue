@@ -18,10 +18,7 @@
             </div>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:items-center">
-            <button type="button" class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <span class="sr-only">View notifications</span>
-              <BellIcon class="h-6 w-6" aria-hidden="true" />
-            </button>
+
 
             <!-- Profile dropdown -->
             <Menu as="div" class="ml-3 relative">
@@ -73,10 +70,7 @@
               <div class="text-base font-medium text-gray-800">{{ auth.user.name }}</div>
               <div class="text-sm font-medium text-gray-500">{{ auth.user.email }}</div>
             </div>
-            <button type="button" class="ml-auto bg-white flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <span class="sr-only">View notifications</span>
-              <BellIcon class="h-6 w-6" aria-hidden="true" />
-            </button>
+
           </div>
           <div class="mt-3 space-y-1">
             <RouterLink v-for="item in userNavigation" :key="item.name" :to="item.href" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
@@ -86,7 +80,7 @@
         </div>
       </DisclosurePanel>
     </Disclosure>
-
+    <FlashNotification />
     <slot></slot>
 
 
@@ -94,22 +88,17 @@
 </template>
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/vue/outline'
+import { MenuIcon, XIcon } from '@heroicons/vue/outline'
 import {useAuthStore} from "../stores/useAuth";
-import {useRouter} from "vue-router";
-import DashboardComponent from "../components/DashboardComponent.vue";
 import InitialsIcon from "../components/icons/InitialsIcon.vue";
-import {onMounted} from "vue";
+import FlashNotification from "../components/FlashNotification.vue";
 
-const router = useRouter();
+import {onMounted} from "vue";
+import {useNotificationsStore} from "../stores/useNotifications";
+
 const auth = useAuthStore();
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+
 const navigation = [
   { name: 'Dashboard', href: { name: 'home'}, current: true },
   { name: 'Add Images', href: { name: 'addImage'}, current: false},
@@ -118,11 +107,9 @@ const userNavigation = [
   { name: 'Sign out', href: { name: 'logout' } },
 ];
 
+const notificationStore = useNotificationsStore();
+
 onMounted(() => {
-  console.log('Start listener');
-  window.Echo.private('App.Models.User.1')
-      .listen('ImageRetrievedEvent', (e) => {
-        console.log(e);
-      })
-})
+  notificationStore.listenToImageRetrievedEvent('App.Models.User.' + auth.user.id);
+});
 </script>

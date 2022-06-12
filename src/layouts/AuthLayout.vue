@@ -100,7 +100,7 @@ const auth = useAuthStore();
 
 
 const navigation = [
-  { name: 'Dashboard', href: { name: 'home'}, current: true },
+  { name: 'Collected Images', href: { name: 'home'}, current: true },
   { name: 'Add Images', href: { name: 'addImage'}, current: false},
 ];
 const userNavigation = [

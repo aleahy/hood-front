@@ -22,9 +22,11 @@ import {computed} from "vue";
 const props = defineProps({
   meta: {
     type: Object,
+    default: {},
   },
   links: {
     type: Object,
+    default: {},
   },
 });
 
@@ -41,7 +43,7 @@ const prevPage = () => {
 };
 
 const hasMultiplePages = computed(() => {
-  return props.meta.last_page !== 1;
+  return props.meta.last_page !== 1 && Object.keys(props.links).length !== 0;
 });
 
 

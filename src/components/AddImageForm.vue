@@ -14,8 +14,7 @@
       </PrimaryButton>
     </form>
 
-    <h3 class="mt-4">Preview</h3>
-    <ImagePreview :image-uri="debouncedImageUri" class="mt-1" @has-error="updatePreviewError" @is-valid="updateIsValidImage"/>
+    <ImagePreview :image-uri="debouncedImageUri" class="mt-4" @has-error="updatePreviewError" @is-valid="updateIsValidImage"/>
   </div>
 </template>
 <script setup>

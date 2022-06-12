@@ -14,20 +14,8 @@ export const useImageStore = defineStore("images", {
         isLoading: (state) => {
             return state.loading;
         },
-        previousUrl: (state) => {
-            return state.links.prev;
-        },
-        nextUrl: (state) => {
-            return state.links.next;
-        },
-        currentPage: (state) => {
-            return state.meta.current_page;
-        },
-        total: (state) => {
-            return state.meta.total;
-        },
-        lastPage: (state) => {
-            return state.meta.last_page;
+        hasImages: (state) => {
+            return state.images.length > 0;
         }
     },
 

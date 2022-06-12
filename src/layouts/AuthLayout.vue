@@ -99,6 +99,7 @@ import {useAuthStore} from "../stores/useAuth";
 import {useRouter} from "vue-router";
 import DashboardComponent from "../components/DashboardComponent.vue";
 import InitialsIcon from "../components/icons/InitialsIcon.vue";
+import {onMounted} from "vue";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -116,4 +117,12 @@ const navigation = [
 const userNavigation = [
   { name: 'Sign out', href: { name: 'logout' } },
 ];
+
+onMounted(() => {
+  console.log('Start listener');
+  window.Echo.private('App.Models.User.1')
+      .listen('ImageRetrievedEvent', (e) => {
+        console.log(e);
+      })
+})
 </script>

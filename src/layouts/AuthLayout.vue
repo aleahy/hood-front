@@ -105,6 +105,8 @@ const userNavigation = [
 ];
 
 onMounted(() => {
-  notificationStore.listenToImageRetrievedEvent('App.Models.User.' + auth.user.id);
+  if (auth.user?.privateChannel) {
+    notificationStore.listenToImageRetrievedEvent(auth.user.privateChannel);
+  }
 });
 </script>

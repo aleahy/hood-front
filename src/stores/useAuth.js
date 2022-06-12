@@ -10,8 +10,8 @@ export const useAuthStore = defineStore("auth", {
   }),
 
   getters: {
-    userInitials: (state) => state.user.name.split(" ").
-      reduce((prev, curr) => prev + curr.substring(0,1), '')
+    userInitials: (state) => state.user?.name?.split(" ").
+      reduce((prev, curr) => prev + curr.substring(0,1), '') ?? '',
   },
 
   actions: {

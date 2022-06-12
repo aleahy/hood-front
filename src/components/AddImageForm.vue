@@ -8,42 +8,55 @@
         </label>
       </div>
       <ErrorMessage field="image_uri" class="mt-2"/>
-      <PrimaryButton type="submit" class="mt-4">Submit Image</PrimaryButton>
+      <PrimaryButton type="submit" class="mt-4 inline-flex items-center space-x-3" :disabled="preventSubmit ? true : undefined">
+        <span>Submit Image</span>
+        <SpinnerIcon v-show="isSubmitting"/>
+      </PrimaryButton>
     </form>
 
-    <div class="mt-10">
-      <img v-show="displayImage" class="w-64" :src="imageUri" @error="hideImage"/>
-    </div>
+    <h3 class="mt-4">Preview</h3>
+    <ImagePreview :image-uri="throttledImageUri" class="mt-1" @has-error="updatePreviewError" @is-valid="updateIsValidImage"/>
   </div>
 </template>
 <script setup>
 import PrimaryButton from "./PrimaryButton.vue";
 import ErrorMessage from "./ErrorMessage.vue";
+import SpinnerIcon from "./icons/SpinnerIcon.vue";
+import ImagePreview from "./ImagePreview.vue";
+
 import {ref, watch } from "vue";
 import {useErrorStore} from "../stores/useError";
 import {useImageStore} from "../stores/useImages";
 
+import throttle from 'lodash/throttle';
+
+
+const preventSubmit = ref(true);
+const isSubmitting = ref(false);
 const imageUri = ref('');
-const displayImage = ref(false);
 const imageStore = useImageStore();
 const errorsStore = useErrorStore();
+const previewError = ref(false);
+const throttledImageUri = ref('');
 
-const hideImage = () => {
-  displayImage.value = false;
-};
 
 const resetForm = () => {
   imageUri.value = "";
+  preventSubmit.value = false;
+  isSubmitting.value = false;
 };
 
 const onSubmit = () => {
   errorsStore.$reset();
+  preventSubmit.value = true;
 
-  if (!displayImage.value) {
+  if (previewError.value) {
     errorsStore.setErrorForField('image_uri', 'This is not a valid image.');
+    preventSubmit.value = false;
     return;
   }
 
+  isSubmitting.value = true;
   imageStore
     .postImageUri(imageUri.value)
     .then(() => {
@@ -51,10 +64,20 @@ const onSubmit = () => {
     })
     .catch(({response}) => {
       errorsStore.storeErrorsResponse(response);
+      isSubmitting.value = false;
+      preventSubmit.value = false;
     });
 };
 
-watch(imageUri, () => {
-  displayImage.value = true;
-});
+const updatePreviewError = (hasError) => {
+  previewError.value = hasError;
+};
+
+const updateIsValidImage = (isValid) => {
+  preventSubmit.value = !isValid;
+};
+
+watch(imageUri, throttle((value) => {
+  throttledImageUri.value = value;
+}, 300));
 </script>

@@ -10,7 +10,7 @@
       <ErrorMessage field="image_uri" class="mt-2"/>
       <PrimaryButton type="submit" class="mt-4 inline-flex items-center space-x-3" :disabled="preventSubmit ? true : undefined">
         <span>Submit Image</span>
-        <SpinnerIcon v-show="isSubmitting"/>
+        <SpinnerIcon v-show="imageStore.loading"/>
       </PrimaryButton>
     </form>
 
@@ -31,7 +31,6 @@ import debounce from 'lodash/debounce';
 
 
 const preventSubmit = ref(true);
-const isSubmitting = ref(false);
 const imageUri = ref('');
 const imageStore = useImageStore();
 const errorsStore = useErrorStore();
@@ -42,7 +41,6 @@ const debouncedImageUri = ref('');
 const resetForm = () => {
   imageUri.value = "";
   preventSubmit.value = false;
-  isSubmitting.value = false;
 };
 
 const onSubmit = () => {
@@ -55,7 +53,6 @@ const onSubmit = () => {
     return;
   }
 
-  isSubmitting.value = true;
   imageStore
     .postImageUri(imageUri.value)
     .then(() => {
@@ -63,7 +60,6 @@ const onSubmit = () => {
     })
     .catch(({response}) => {
       errorsStore.storeErrorsResponse(response);
-      isSubmitting.value = false;
       preventSubmit.value = false;
     });
 };

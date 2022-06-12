@@ -5,7 +5,10 @@
               leave-active-class="transition ease-in duration-700"
               leave-from-class="opacity-100"
               leave-to-class="opacity-0">
-  <div v-show="show" class=" h-12 bg-green-300 mt-2 flex items-center text-green-800 px-12 mx-2 border-l-4 border-green-600">
+  <div v-show="show"
+       class="h-12 mt-2 flex items-center px-12 mx-2 border-l-4"
+       :class="{'bg-green-300 text-green-800 border-green-600': flashStatus === 'success',
+                'bg-red-300 text-red-800 border-red-600': flashStatus !== 'success'}">
     {{ flashMessage }}
   </div>
   </transition>
@@ -14,16 +17,27 @@
 import { ref } from "vue";
 import { useNotificationsStore } from "../stores/useNotifications";
 
+const props = defineProps({
+  timeout: {
+    type: Number,
+    default: 5000,
+  },
+});
+
 const flashMessage = ref('');
+const flashStatus = ref('success');
+
 const show = ref(false);
 let timer = 0;
 
-const flash = (message) => {
+const flash = (message, status = 'success') => {
   if (! message) {
     return;
   }
 
   flashMessage.value = message;
+  flashStatus.value = status;
+
   show.value = true;
 
   hideWithTimeout();
@@ -37,13 +51,14 @@ const hideWithTimeout = () => {
   clearTimeout(timer);
   timer = setTimeout(() => {
     hide();
-  }, 2000);
+  }, props.timeout);
 };
 
 const notificationsStore = useNotificationsStore();
 notificationsStore.$subscribe((mutation) => {
+  console.log(mutation.events);
   if (mutation.events.type === 'add') {
-    flash(mutation.events.newValue?.message);
+    flash(mutation.events.newValue?.message, mutation.events.newValue?.status ?? 'success');
   }
 })
 

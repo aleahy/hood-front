@@ -29,29 +29,30 @@
       Have an account already?&nbsp;<RouterLink :to="{ name: 'login' }" class="text-blue-500 hover:underline">Login </RouterLink>.
     </div>
     <div class="mt-4">
-      <button
-        type="submit"
-        class="bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500"
-      >
-        Register
-      </button>
+      <PrimaryButton type="submit" :disabled="auth.loading" class="inline-flex items-center space-x-4">
+        <span>Register</span>
+        <SpinnerIcon v-if="auth.loading"/>
+      </PrimaryButton>
     </div>
   </form>
 </template>
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, ref } from "vue";
 import { useAuthStore } from "../../stores/useAuth";
 import { useRouter } from "vue-router";
 import ErrorMessage from "../../components/ErrorMessage.vue";
 import {useErrorStore} from "../../stores/useError";
+import PrimaryButton from "../../components/PrimaryButton.vue";
+import SpinnerIcon from "../../components/icons/SpinnerIcon.vue";
 
 const errorStore = useErrorStore();
+const auth = useAuthStore();
 
 const router = useRouter();
 const onSubmit = () => {
   errorStore.$reset();
 
-  useAuthStore().register({
+  auth.register({
       name: name.value,
       email: email.value,
       password: password.value,

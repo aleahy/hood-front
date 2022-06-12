@@ -9,9 +9,6 @@
               <img class="hidden lg:block h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg" alt="Workflow" />
             </div>
             <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-<!--              <RouterLink v-for="item in navigation" :key="item.name" :to="item.href" :class="[item.current ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">-->
-<!--                {{ item.name }}-->
-<!--              </RouterLink>-->
               <RouterLink v-for="item in navigation" :key="item.name" :to="item.href" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900"  active-class="border-indigo-500 border-b-2" >
                 {{ item.name }}
               </RouterLink>
@@ -39,6 +36,8 @@
               </transition>
             </Menu>
           </div>
+
+
           <div class="-mr-2 flex items-center sm:hidden">
             <!-- Mobile menu button -->
             <DisclosureButton class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -80,34 +79,31 @@
         </div>
       </DisclosurePanel>
     </Disclosure>
-    <FlashNotification />
+    <FlashNotification :timeout="3000" />
     <slot></slot>
-
-
   </div>
 </template>
+
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { MenuIcon, XIcon } from '@heroicons/vue/outline'
-import {useAuthStore} from "../stores/useAuth";
 import InitialsIcon from "../components/icons/InitialsIcon.vue";
 import FlashNotification from "../components/FlashNotification.vue";
-
 import {onMounted} from "vue";
+import {useAuthStore} from "../stores/useAuth";
 import {useNotificationsStore} from "../stores/useNotifications";
 
 const auth = useAuthStore();
-
+const notificationStore = useNotificationsStore();
 
 const navigation = [
-  { name: 'Collected Images', href: { name: 'home'}, current: true },
-  { name: 'Add Images', href: { name: 'addImage'}, current: false},
+  { name: 'Collected Images', href: { name: 'home'} },
+  { name: 'Add Images', href: { name: 'addImage'} },
 ];
+
 const userNavigation = [
   { name: 'Sign out', href: { name: 'logout' } },
 ];
-
-const notificationStore = useNotificationsStore();
 
 onMounted(() => {
   notificationStore.listenToImageRetrievedEvent('App.Models.User.' + auth.user.id);

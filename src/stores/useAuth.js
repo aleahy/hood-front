@@ -4,6 +4,7 @@ import {useStorage} from "@vueuse/core";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
+    loading: useStorage('loading', false),
     loggedIn: useStorage("loggedIn", false),
     user: useStorage("user", {}),
   }),
@@ -15,31 +16,50 @@ export const useAuthStore = defineStore("auth", {
 
   actions: {
     async login(credentials) {
+      this.loading = true;
+
+      try {
         await axios.get("/sanctum/csrf-cookie");
 
         await axios.post("/login", credentials);
 
         await this.getUser();
+      }
+
+      finally {
+        this.loading = false;
+      }
     },
 
     async logout() {
-      await axios.post("/logout");
+      this.loading = true;
+      try {
+        await axios.post("/logout");
 
-      this.reset();
+        this.reset();
+      }
+      finally {
+        this.loading = false;
+      }
     },
 
     async register(attributes) {
+      this.loading = true;
 
+      try {
+        await axios.get("/sanctum/csrf-cookie");
 
-      await axios.get("/sanctum/csrf-cookie");
+        await axios.post("/register", attributes);
 
-      await axios.post("/register", attributes);
+        await this.getUser();
+      }
 
-      await this.getUser();
+      finally {
+        this.loading = false;
+      }
     },
 
     async getUser() {
-      console.log('Getting user');
       this.user = (await axios.get("api/user")).data;
       this.loggedIn = true;
     },
@@ -47,6 +67,7 @@ export const useAuthStore = defineStore("auth", {
     reset() {
       this.user = {};
       this.loggedIn = false;
-    }
+      this.loading = false;
+    },
   },
 });

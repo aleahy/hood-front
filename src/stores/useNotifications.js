@@ -14,15 +14,28 @@ export const useNotificationsStore = defineStore("notifications", {
        listenToImageRetrievedEvent(channel) {
            window.Echo.private(channel)
                .listen('ImageRetrievedEvent', (e) => {
-                   this.notifications.push(this.createImageRetrievedNotification(e))
+                   console.log(e);
+                   this.notifications.push(this.createImageRetrievedNotification())
+               })
+               .listen('ImageRetrievalFailedEvent', (e) => {
+                   console.log(e);
+                   this.notifications.push(this.createImageRetrievalFailedNotification())
                })
        },
 
-        createImageRetrievedNotification(data) {
+        createImageRetrievedNotification() {
            return {
-               message: 'Your image has been successfully retrieved and saved.'
+               status: 'success',
+               message: 'Your image has been successfully retrieved and saved.',
            }
         },
+        createImageRetrievalFailedNotification() {
+           return {
+               status: 'error',
+               message: 'There was a problem retrieving your image.',
+           }
+        }
+
     }
 });
 

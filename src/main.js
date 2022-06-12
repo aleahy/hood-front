@@ -11,7 +11,8 @@ import Pusher from "pusher-js";
 
 
 
-axios.defaults.baseURL = 'http://localhost:8000';
+
+axios.defaults.baseURL = import.meta.env.VITE_AXIOS_BASE_URL;
 axios.defaults.withCredentials = true;
 // axios.interceptors.response.use(undefined, function(error) {
 //     switch (error.response.status) {
@@ -30,8 +31,8 @@ axios.defaults.withCredentials = true;
 window.Pusher = Pusher;
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: 'abcdef',
-    cluster: 'mt1',
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_CLUSTER,
     wsHost: window.location.hostname,
     wsPort: 6001,
     forceTLS: false,

@@ -56,7 +56,6 @@ const hideWithTimeout = () => {
 
 const notificationsStore = useNotificationsStore();
 notificationsStore.$subscribe((mutation) => {
-  console.log(mutation.events);
   if (mutation.events.type === 'add') {
     flash(mutation.events.newValue?.message, mutation.events.newValue?.status ?? 'success');
   }

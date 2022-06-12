@@ -4,7 +4,6 @@ import AuthLayout from "../layouts/AuthLayout.vue";
 
 const redirectToHomeOnLoggedIn = (to, from, next) => {
   if (useAuthStore().loggedIn) {
-    console.log("redirecting to home");
     next({ name: "home" });
   } else {
     next();

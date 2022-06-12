@@ -38,12 +38,15 @@
 import { onMounted } from "vue";
 import {useImageStore} from "../stores/useImages";
 import PaginationLinks from "./PaginationLinks.vue";
+import {useRouter} from "vue-router";
 
 const imagesStore = useImageStore();
+const router = useRouter();
 
 const loadPage = (page) => {
+  router.push({name: 'home', query: { page: page }});
   imagesStore.getImagesByPage(page);
-}
+};
 
 
 onMounted(async () => {
